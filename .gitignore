@@ -1,0 +1,9 @@
+.vs
+.vscode
+**/*.db
+**/*.opendb
+Capture/*.*
+ParticleSampler.pro.user
+Prebuild/*
+Prebuild.zip
+Log/*
