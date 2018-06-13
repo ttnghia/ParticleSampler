@@ -54,9 +54,8 @@ void MainWindow::showEvent(QShowEvent* ev)
         updateStatusMemoryUsage();
         finishIteration(0, 0);
 
-        m_Controller->m_cbScene->getComboBox()->setCurrentIndex(1);
-        if(m_Controller->m_cbScene->getComboBox()->count() == 2) {} else {
-            //            m_Controller->m_cbSimulationScene->setCurrentIndex(QtAppUtils::getDefaultSceneID());
+        if(m_Controller->m_cbScene->count() > 1) {
+            m_Controller->m_cbScene->setCurrentIndex(QtAppUtils::getDefaultSceneID());
         }
     }
 }
