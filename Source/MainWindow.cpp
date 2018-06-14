@@ -117,8 +117,7 @@ void MainWindow::changeScene(bool bReload)
     if(sceneFile == "None") {
         return;
     }
-    m_Controller->m_btnReloadScene->setDisabled(true);
-    m_Controller->m_cbScene->setDisabled(true);
+    m_Controller->enableRelaxParamsWidgets(false);
     updateStatusRelaxation("Building scene...");
     m_BusyBar->setBusy(true);
     ////////////////////////////////////////////////////////////////////////////////
@@ -139,8 +138,7 @@ void MainWindow::startNewScene(const QString& sceneFile)
     m_FrameNumber = 0;
     updateWindowTitle(QtAppUtils::getDefaultPath("Scenes") + "/" + sceneFile);
     updateStatusRelaxation("Ready");
-    m_Controller->m_btnReloadScene->setEnabled(true);
-    m_Controller->m_cbScene->setEnabled(true);
+    m_Controller->enableRelaxParamsWidgets(true);
     m_BusyBar->reset();
 }
 
@@ -157,8 +155,7 @@ void MainWindow::startStopRelaxation()
     }
     bool isRunning = m_Sampler->isRunning();
     if(!isRunning) {
-        m_Controller->m_cbScene->setDisabled(true);
-        m_Controller->m_btnReloadScene->setDisabled(true);
+        m_Controller->enableRelaxParamsWidgets(false);
         updateStatusRelaxation("Running relaxation...");
         fut = std::async(std::launch::async, [&]
                          {
@@ -167,8 +164,7 @@ void MainWindow::startStopRelaxation()
                          });
     } else {
         m_Sampler->stop();
-        m_Controller->m_cbScene->setDisabled(false);
-        m_Controller->m_btnReloadScene->setDisabled(false);
+        m_Controller->enableRelaxParamsWidgets(true);
         updateStatusRelaxation("Stopped");
     }
     m_Controller->m_btnStartStopRelaxation->setText(!isRunning ? QString("Stop") : QString("Resume"));
@@ -199,8 +195,7 @@ void MainWindow::finishRelaxation(bool bSuccess)
     } else {
         updateStatusRelaxation("Relaxation failed.");
     }
-    m_Controller->m_cbScene->setDisabled(false);
-    m_Controller->m_btnReloadScene->setDisabled(false);
+    m_Controller->enableRelaxParamsWidgets(true);
     m_BusyBar->reset();
 }
 
@@ -209,8 +204,7 @@ void MainWindow::pauseRelaxation()
 {
     m_Controller->m_btnStartStopRelaxation->setText(QString("Resume"));
     updateStatusRelaxation("Relaxation paused");
-    m_Controller->m_cbScene->setDisabled(false);
-    m_Controller->m_btnReloadScene->setDisabled(false);
+    m_Controller->enableRelaxParamsWidgets(true);
     m_BusyBar->reset();
 }
 

@@ -24,6 +24,19 @@
 #include "Controller.h"
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void Controller::enableRelaxParamsWidgets(bool bEnable)
+{
+    for(auto& widget: m_RelaxParamsWidgets) {
+        auto cbWidget = dynamic_cast<EnhancedComboBox*>(widget);
+        if(cbWidget != nullptr) {
+            cbWidget->setEnabled(bEnable);
+        } else {
+            widget->setEnabled(bEnable);
+        }
+    }
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void Controller::updateRelaxParams()
 {
     const auto& relaxParams = m_ParticleSampler->getRelaxParams();
@@ -50,7 +63,7 @@ void Controller::setDefaultParams()
     m_cbMaxIterations->setCurrentIndex(0);
     m_cbCheckFrequency->setCurrentIndex(2);
     m_cbIntersectionThreshold->setCurrentIndex(2);
-    m_cbInitialJitter->setCurrentIndex(1);
+    m_cbInitialJitter->setCurrentIndex(4);
 
     m_cbSPHCFLFactor->setCurrentIndex(4);
     m_cbSPHPressureStiffness->setCurrentIndex(6);
@@ -91,7 +104,7 @@ void Controller::connectWidgets()
     ////////////////////////////////////////////////////////////////////////////////
     // materials and particle color mode
     connect(m_smParticleColorMode, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped), m_RenderWidget, &RenderWidget::setParticleColorMode);
-    connect( m_msParticleMaterial, &MaterialSelector::materialChanged,                                m_RenderWidget, &RenderWidget::setParticleMaterial);
+    connect(m_msParticleMaterial,  &MaterialSelector::materialChanged,                                m_RenderWidget, &RenderWidget::setParticleMaterial);
     ////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +119,7 @@ void Controller::connectWidgets()
 
     ////////////////////////////////////////////////////////////////////////////////
     // buttons
-    connect(  m_btnResetCamera, &QPushButton::clicked, m_RenderWidget, &RenderWidget::resetCameraPosition);
+    connect(m_btnResetCamera,   &QPushButton::clicked, m_RenderWidget, &RenderWidget::resetCameraPosition);
     connect(m_btnClipViewPlane, &QPushButton::clicked, m_RenderWidget, &RenderWidget::enableClipPlane);
     ////////////////////////////////////////////////////////////////////////////////
 }
@@ -136,21 +149,21 @@ void Controller::setupColorModeControllers()
     rdbColorRamp->setChecked(true);
     ////////////////////////////////////////////////////////////////////////////////
     QGridLayout* layoutColorMode = new QGridLayout;
-    layoutColorMode->addWidget( rdbColorRandom, 0, 0, 1, 1);
-    layoutColorMode->addWidget(   rdbColorRamp, 0, 1, 1, 1);
+    layoutColorMode->addWidget(rdbColorRandom,  0, 0, 1, 1);
+    layoutColorMode->addWidget(rdbColorRamp,    0, 1, 1, 1);
     layoutColorMode->addWidget(rdbColorUniform, 1, 0, 1, 1);
-    layoutColorMode->addWidget( rdbColorObjIdx, 1, 1, 1, 1);
+    layoutColorMode->addWidget(rdbColorObjIdx,  1, 1, 1, 1);
     ////////////////////////////////////////////////////////////////////////////////
     m_smParticleColorMode = new QSignalMapper(this);
-    connect( rdbColorRandom, SIGNAL(clicked()), m_smParticleColorMode, SLOT(map()));
-    connect(   rdbColorRamp, SIGNAL(clicked()), m_smParticleColorMode, SLOT(map()));
+    connect(rdbColorRandom,  SIGNAL(clicked()), m_smParticleColorMode, SLOT(map()));
+    connect(rdbColorRamp,    SIGNAL(clicked()), m_smParticleColorMode, SLOT(map()));
     connect(rdbColorUniform, SIGNAL(clicked()), m_smParticleColorMode, SLOT(map()));
-    connect( rdbColorObjIdx, SIGNAL(clicked()), m_smParticleColorMode, SLOT(map()));
+    connect(rdbColorObjIdx,  SIGNAL(clicked()), m_smParticleColorMode, SLOT(map()));
 
-    m_smParticleColorMode->setMapping( rdbColorRandom, static_cast<int>(ParticleColorMode::Random));
-    m_smParticleColorMode->setMapping(   rdbColorRamp, static_cast<int>(ParticleColorMode::Ramp));
+    m_smParticleColorMode->setMapping(rdbColorRandom,  static_cast<int>(ParticleColorMode::Random));
+    m_smParticleColorMode->setMapping(rdbColorRamp,    static_cast<int>(ParticleColorMode::Ramp));
     m_smParticleColorMode->setMapping(rdbColorUniform, static_cast<int>(ParticleColorMode::UniformMaterial));
-    m_smParticleColorMode->setMapping( rdbColorObjIdx, static_cast<int>(ParticleColorMode::ObjectIndex));
+    m_smParticleColorMode->setMapping(rdbColorObjIdx,  static_cast<int>(ParticleColorMode::ObjectIndex));
     ////////////////////////////////////////////////////////////////////////////////
     QVBoxLayout* layoutColorCtrls = new QVBoxLayout;
     layoutColorCtrls->addLayout(layoutColorMode);
@@ -183,17 +196,20 @@ void Controller::setupSceneControllers()
     m_cbScene = new EnhancedComboBox;
     m_cbScene->addItem(QString("None"));
     m_cbScene->addItems(QtAppUtils::getFiles(QtAppUtils::getDefaultPath("Scenes")));
+    m_RelaxParamsWidgets.push_back(m_cbScene);
     ////////////////////////////////////////////////////////////////////////////////
     m_btnReloadScene   = new QPushButton(" Reload ");
     m_chkReloadVizData = new QCheckBox("Reload vizualization data");
+    m_RelaxParamsWidgets.push_back(m_btnReloadScene);
+    m_RelaxParamsWidgets.push_back(m_chkReloadVizData);
     ////////////////////////////////////////////////////////////////////////////////
     QHBoxLayout* layoutReloadScene = new QHBoxLayout;
     layoutReloadScene->addWidget(m_chkReloadVizData, 10);
     layoutReloadScene->addStretch(1);
     layoutReloadScene->addWidget(m_btnReloadScene, 10);
     QVBoxLayout* layoutScene = new QVBoxLayout;
-    layoutScene->addLayout(        m_cbScene->getLayout());
-    layoutScene->addLayout(       QtAppUtils::getLayoutSeparator(5));
+    layoutScene->addLayout(m_cbScene->getLayout());
+    layoutScene->addLayout(QtAppUtils::getLayoutSeparator(5));
     layoutScene->addLayout(layoutReloadScene);
     QGroupBox* grScene = new QGroupBox;
     grScene->setTitle("Scene");
@@ -210,6 +226,11 @@ void Controller::setupSamplingParametersControllers()
     m_cbCheckFrequency        = new EnhancedComboBox;
     m_cbIntersectionThreshold = new EnhancedComboBox;
     m_cbInitialJitter         = new EnhancedComboBox;
+
+    m_RelaxParamsWidgets.push_back(m_cbMaxIterations);
+    m_RelaxParamsWidgets.push_back(m_cbCheckFrequency);
+    m_RelaxParamsWidgets.push_back(m_cbIntersectionThreshold);
+    m_RelaxParamsWidgets.push_back(m_cbInitialJitter);
 
     m_cbMaxIterations->addItems({ "100", "500", "1000", "2000", "5000", "10000" });
     m_cbCheckFrequency->addItems({ "1", "5", "10", "20", "30", "40", "50", "100" });
@@ -239,6 +260,14 @@ void Controller::setupSamplingParametersControllers()
     m_cbSPHNearKernelRadiusRatio = new EnhancedComboBox;
     m_cbSPHNearPressureStiffness = new EnhancedComboBox;
     m_cbSPHBoundaryRestitution   = new EnhancedComboBox;
+
+    m_RelaxParamsWidgets.push_back(m_cbSPHCFLFactor);
+    m_RelaxParamsWidgets.push_back(m_cbSPHPressureStiffness);
+    m_RelaxParamsWidgets.push_back(m_cbSPHViscosity);
+    m_RelaxParamsWidgets.push_back(m_cbSPHOverlapThreshold);
+    m_RelaxParamsWidgets.push_back(m_cbSPHNearKernelRadiusRatio);
+    m_RelaxParamsWidgets.push_back(m_cbSPHNearPressureStiffness);
+    m_RelaxParamsWidgets.push_back(m_cbSPHBoundaryRestitution);
 
     m_cbSPHCFLFactor->addItems({ "0.001", "0.005", "0.01", "0.05", "0.1", "0.5", "1.0" });
     m_cbSPHViscosity->addItems({ "0.001", "0.005", "0.01", "0.05", "0.1", "0.5", "1.0" });
@@ -286,6 +315,7 @@ void Controller::setupSamplingParametersControllers()
 void Controller::setupButtons()
 {
     m_btnResetParams = new QPushButton("Reset Parameters");
+    m_RelaxParamsWidgets.push_back(m_btnResetParams);
     m_LayoutRelaxationControllers->addSpacing(10);
     m_LayoutRelaxationControllers->addWidget(m_btnResetParams);
     ////////////////////////////////////////////////////////////////////////////////
@@ -298,9 +328,9 @@ void Controller::setupButtons()
     ////////////////////////////////////////////////////////////////////////////////
     QGridLayout* layoutButtons = new QGridLayout;
     layoutButtons->addWidget(m_btnStartStopRelaxation, 0, 0, 1, 2);
-    layoutButtons->addWidget(        m_btnResetCamera, 1, 0, 1, 2);
-    layoutButtons->addWidget(      m_btnClipViewPlane, 2, 0, 1, 1);
-    layoutButtons->addWidget(      m_btnEditClipPlane, 2, 1, 1, 1);
+    layoutButtons->addWidget(m_btnResetCamera,         1, 0, 1, 2);
+    layoutButtons->addWidget(m_btnClipViewPlane,       2, 0, 1, 1);
+    layoutButtons->addWidget(m_btnEditClipPlane,       2, 1, 1, 1);
     ////////////////////////////////////////////////////////////////////////////////
     m_MainLayout->addStretch();
     m_MainLayout->addLayout(layoutButtons);

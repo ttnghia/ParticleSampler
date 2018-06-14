@@ -47,13 +47,14 @@ public:
     }
 
 public slots:
+    void enableRelaxParamsWidgets(bool bEnable);
     void updateRelaxParams();
     void setDefaultParams();
 
 private:
-    QWidget*     m_RelaxationControllers       = new QWidget;
-    QVBoxLayout* m_LayoutRelaxationControllers = new QVBoxLayout;
-
+    QWidget*         m_RelaxationControllers       = new QWidget;
+    QVBoxLayout*     m_LayoutRelaxationControllers = new QVBoxLayout;
+    Vector<QWidget*> m_RelaxParamsWidgets;
     ////////////////////////////////////////////////////////////////////////////////
     void setupGUI();
     void connectWidgets();
