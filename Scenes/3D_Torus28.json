@@ -1,0 +1,51 @@
+{
+    "GlobalParameters":
+    {
+        "Dimension" : 3
+    },
+    "SimulationParameters":
+    {
+        "SimulationDomainBox" :
+        {
+            "BoxMin" : [-1, -1, -1],
+            "BoxMax" : [1, 1, 1]
+        },
+        "ParticleRadius" : 0.01
+    },
+    "ParticleGenerators":
+    [
+        {
+            "GeometryType" : "Torus28",
+            "UniqueName" : "Torus28",
+            "RingRadius" : 0.3,
+            "Translation" : [0, 0],
+            "RotationAxisAngle" : [1, 0, 1, 15],
+            "Scale" : 0.8,
+            "JitterRatio" : 0.1,
+            "SamplingRatio" : 0.85,
+            "UseFileCache" : true,
+            "ParticleFileType" : "bgeo",
+            "ParticleOutputFile" : "Data/3D_torus28.bgeo"
+        }
+    ],
+    "VisualizationParameters":
+    {
+        "CameraPosition" : [-2.74, 0.75, 0],
+        "CameraFocus" : [0, -0.2, 0],
+        "Light" :
+        [
+            {
+                "Position" : [-10, 20, 10],
+                "Diffuse" : [0.7, 0.7, 0.7]
+            },
+            {
+                "Position" : [10, 20, -10],
+                "Diffuse" : [0.7, 0.7, 0.7]
+            },
+            {
+                "Position" : [0, -20, 0],
+                "Diffuse" : [1, 1, 1]
+            }
+        ]
+    }
+}

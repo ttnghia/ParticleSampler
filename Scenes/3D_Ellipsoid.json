@@ -1,32 +1,37 @@
 {
     "GlobalParameters":
     {
-        "Dimension" : 2
+        "Dimension" : 3
     },
     "SimulationParameters":
     {
         "SimulationDomainBox" :
         {
-            "BoxMin" : [-1, -1],
-            "BoxMax" : [1, 1]
+            "BoxMin" : [-1, -1, -1],
+            "BoxMax" : [1, 1, 1]
         },
         "ParticleRadius" : 0.01
     },
     "ParticleGenerators":
     [
         {
-            "GeometryType" : "Sphere",
-            "UniqueName" : "Sphere",
-            "Translation" : [0, 0],
-            "Scale" : 0.8,
+            "GeometryType" : "Ellipsoid",
+            "UniqueName" : "Ellipsoid",
+            "RadiusRatio" : [1, 0.2, 1],
+            "Scale" : 0.95,
+            "Translation" : [0, 0, 0],
+            "RotationAxisAngle" : [-1, 0, 1, 10],
             "JitterRatio" : 0.1,
-            "SamplingRatio" : 0.85
+            "SamplingRatio" : 0.85,
+            "UseFileCache" : true,
+            "ParticleFileType" : "bgeo",
+            "ParticleOutputFile" : "Data/3D_ellipsoid.bgeo"
         }
     ],
     "VisualizationParameters":
     {
-        "CameraPosition" : [0, 0, 0.5],
-        "CameraFocus" : [0, 0, 0],
+        "CameraPosition" : [-2.74, 0.75, 0],
+        "CameraFocus" : [0, -0.2, 0],
         "Light" :
         [
             {

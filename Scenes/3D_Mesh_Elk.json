@@ -10,23 +10,29 @@
             "BoxMin" : [-1, -1, -1],
             "BoxMax" : [1, 1, 1]
         },
-        "CellSize" : 0.02,
-        "RatioCellSizePRadius" : 4
+        "ParticleRadius" : 0.0025
     },
     "ParticleGenerators":
     [
         {
-            "GeometryType" : "Torus",
-            "UniqueName" : "Torus",
-            "Translation" : [0, 0.0, 0],
-            "RotationAxisAngle" : [0, 0, 1, 90],
-            "Scale" : 0.8,
+            "GeometryType" : "Mesh",
+            "UniqueName" : "Mesh",
+            "MeshFile" : "Mesh/elk.obj",
+            "SDFStep" : 0.005,
+            "Translation" : [0, 0, 0],
+            "RotationAxisAngle" : [0, 1, 0, -45],
+            "Scale" : 1,
             "JitterRatio" : 0.1,
-            "SamplingRatio" : 0.85
+            "SamplingRatio" : 0.85,
+            "UseFileCache" : true,
+            "ParticleFileType" : "bgeo",
+            "ParticleOutputFile" : "Data/3D_mesh_elk.bgeo"
         }
     ],
     "VisualizationParameters":
     {
+        "CameraPosition" : [0, 0.75, 2.74],
+        "CameraFocus" : [0, -0.2, 0],
         "Light" :
         [
             {

@@ -1,0 +1,52 @@
+{
+    "GlobalParameters":
+    {
+        "Dimension" : 3
+    },
+    "SimulationParameters":
+    {
+        "SimulationDomainBox" :
+        {
+            "BoxMin" : [-1, -1, -1.5],
+            "BoxMax" : [1, 1, 1.5]
+        },
+        "ParticleRadius" : 0.0025
+    },
+    "ParticleGenerators":
+    [
+        {
+            "GeometryType" : "Mesh",
+            "UniqueName" : "Mesh",
+            "MeshFile" : "Mesh/tricertp.obj",
+            "SDFStep" : 0.005,
+            "Translation" : [0, 0, -0.2],
+            "RotationAxisAngle" : [0, 1, 0, 0],
+            "Scale" : 1.2,
+            "JitterRatio" : 0.1,
+            "SamplingRatio" : 0.85,
+            "UseFileCache" : true,
+            "ParticleFileType" : "bgeo",
+            "ParticleOutputFile" : "Data/3D_mesh_tricertp.bgeo"
+        }
+    ],
+    "VisualizationParameters":
+    {
+        "CameraPosition" : [2.74, 0.75, 0],
+        "CameraFocus" : [0, -0.2, 0],
+        "Light" :
+        [
+            {
+                "Position" : [-10, 20, 10],
+                "Diffuse" : [0.7, 0.7, 0.7]
+            },
+            {
+                "Position" : [10, 20, -10],
+                "Diffuse" : [0.7, 0.7, 0.7]
+            },
+            {
+                "Position" : [0, -20, 0],
+                "Diffuse" : [1, 1, 1]
+            }
+        ]
+    }
+}
