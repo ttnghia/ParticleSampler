@@ -72,6 +72,18 @@ bool MainWindow::processKeyPressEvent(QKeyEvent* event)
             m_Controller->m_btnClipViewPlane->click();
             return true;
 
+        case Qt::Key_F5:
+            m_Controller->m_btnReloadScene->click();
+            return true;
+
+        case Qt::Key_PageDown:
+            m_Controller->m_cbScene->nextItem();
+            return true;
+
+        case Qt::Key_PageUp:
+            m_Controller->m_cbScene->prevItem();
+            return true;
+
         default:
             return OpenGLMainWindow::processKeyPressEvent(event);
     }
@@ -107,6 +119,8 @@ void MainWindow::changeScene(bool bReload)
     }
     m_Controller->m_btnReloadScene->setDisabled(true);
     m_Controller->m_cbScene->setDisabled(true);
+    updateStatusRelaxation("Building scene...");
+    m_BusyBar->setBusy(true);
     ////////////////////////////////////////////////////////////////////////////////
     static std::future<void> fut;
     if(fut.valid()) {
@@ -116,12 +130,18 @@ void MainWindow::changeScene(bool bReload)
                      {
                          m_Sampler->reloadVizData(bReload ? m_Controller->m_chkReloadVizData->isChecked() : true);
                          m_Sampler->changeScene(sceneFile);
-                         m_FrameNumber = 0;
-                         updateWindowTitle(QtAppUtils::getDefaultPath("Scenes") + "/" + sceneFile);
-                         updateStatusRelaxation("Ready");
-                         m_Controller->m_btnReloadScene->setEnabled(true);
-                         m_Controller->m_cbScene->setEnabled(true);
                      });
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void MainWindow::startNewScene(const QString& sceneFile)
+{
+    m_FrameNumber = 0;
+    updateWindowTitle(QtAppUtils::getDefaultPath("Scenes") + "/" + sceneFile);
+    updateStatusRelaxation("Ready");
+    m_Controller->m_btnReloadScene->setEnabled(true);
+    m_Controller->m_cbScene->setEnabled(true);
+    m_BusyBar->reset();
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -137,13 +157,13 @@ void MainWindow::startStopRelaxation()
     }
     bool isRunning = m_Sampler->isRunning();
     if(!isRunning) {
+        m_Controller->m_cbScene->setDisabled(true);
+        m_Controller->m_btnReloadScene->setDisabled(true);
+        updateStatusRelaxation("Running relaxation...");
         fut = std::async(std::launch::async, [&]
                          {
                              m_Controller->updateRelaxParams();
                              m_Sampler->startRelaxation();
-                             m_Controller->m_cbScene->setDisabled(true);
-                             m_Controller->m_btnReloadScene->setDisabled(true);
-                             updateStatusRelaxation("Running relaxation...");
                          });
     } else {
         m_Sampler->stop();
@@ -266,6 +286,7 @@ void MainWindow::connectWidgets()
             });
     connect(m_Sampler, &ParticleSampler::relaxationPaused,   [&] { QMetaObject::invokeMethod(this, "pauseRelaxation", Qt::QueuedConnection); });
     connect(m_Sampler, &ParticleSampler::numParticleChanged, this,           &MainWindow::updateStatusNumParticles);
+    connect(m_Sampler, &ParticleSampler::sceneChanged,       this,           &MainWindow::startNewScene);
     connect(m_Sampler, &ParticleSampler::dimensionChanged,   m_RenderWidget, &RenderWidget::updateSolverDimension);
     connect(m_Sampler, &ParticleSampler::domainChanged,      m_RenderWidget, &RenderWidget::setBox);
     connect(m_Sampler, &ParticleSampler::cameraChanged,      m_RenderWidget, &RenderWidget::updateCamera);

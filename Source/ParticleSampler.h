@@ -64,6 +64,7 @@ signals:
     void iterationFinished(unsigned int iter, float minDistanceRatio);
     void numParticleChanged(unsigned int numParticles);
     void vizDataChanged();
+    void sceneChanged(const QString& sceneFile);
 
 private:
     SharedPtr<ParticleData>               m_ParticleData = std::make_shared<ParticleData>();

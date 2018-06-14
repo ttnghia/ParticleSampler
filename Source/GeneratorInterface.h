@@ -45,6 +45,7 @@ public:
     void updateRelaxParams();
     bool doFrameRelaxation(UInt frame);
     void reportFailed(UInt frame);
+    void saveParticles();
     ////////////////////////////////////////////////////////////////////////////////
     auto& getRelaxParams() { return m_RelaxParams; }
     float getMinDistanceRatio();

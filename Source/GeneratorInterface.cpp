@@ -164,9 +164,9 @@ void ParticleGeneratorInterface::loadScene(const String& sceneFile)
                 m_ParticleData->nParticles.push_back(nGen);
                 ++m_ParticleData->nObjects;
                 m_ParticleData->nTotalParticles += nGen;
-                m_Logger->printLog(String("Generated ") + Formatters::toString(nGen) + String(" particles by generator: ") + generator->nameID() +
-                                   String(". Time: ") + timer.getRunTime());
             }
+            m_Logger->printLog(String("Generated ") + Formatters::toString(nGen) + String(" particles by generator: ") + generator->nameID() +
+                               String(". Time: ") + timer.getRunTime());
         }
     } else {
         for(auto& generator : m_Generators3D) {
@@ -182,13 +182,12 @@ void ParticleGeneratorInterface::loadScene(const String& sceneFile)
                 m_ParticleData->nParticles.push_back(nGen);
                 ++m_ParticleData->nObjects;
                 m_ParticleData->nTotalParticles += nGen;
-                m_Logger->printLog(String("Generated ") + Formatters::toString(nGen) + String(" particles by generator: ") + generator->nameID() +
-                                   String(". Time: ") + timer.getRunTime());
             }
+            m_Logger->printLog(String("Generated ") + Formatters::toString(nGen) + String(" particles by generator: ") + generator->nameID() +
+                               String(". Time: ") + timer.getRunTime());
         }
     }
 
-    __BNN_REQUIRE(m_ParticleData->positionPtrs.size() > 0);
     ////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -252,6 +251,20 @@ void ParticleGeneratorInterface::reportFailed(UInt frame)
     } else {
         for(auto& generator: m_Generators3D) {
             generator->relaxer().reportFailed(frame);
+        }
+    }
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void ParticleGeneratorInterface::saveParticles()
+{
+    if(m_ParticleData->dimension == 2) {
+        for(auto& generator: m_Generators2D) {
+            generator->saveParticlesToFile();
+        }
+    } else {
+        for(auto& generator: m_Generators3D) {
+            generator->saveParticlesToFile();
         }
     }
 }

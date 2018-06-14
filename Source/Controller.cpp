@@ -183,18 +183,18 @@ void Controller::setupSceneControllers()
     m_cbScene = new EnhancedComboBox;
     m_cbScene->addItem(QString("None"));
     m_cbScene->addItems(QtAppUtils::getFiles(QtAppUtils::getDefaultPath("Scenes")));
-    m_btnReloadScene = new QPushButton(" Reload ");
     ////////////////////////////////////////////////////////////////////////////////
+    m_btnReloadScene   = new QPushButton(" Reload ");
     m_chkReloadVizData = new QCheckBox("Reload vizualization data");
     ////////////////////////////////////////////////////////////////////////////////
     QHBoxLayout* layoutReloadScene = new QHBoxLayout;
-    layoutReloadScene->addLayout(m_cbScene->getLayout(), 10);
+    layoutReloadScene->addWidget(m_chkReloadVizData, 10);
     layoutReloadScene->addStretch(1);
     layoutReloadScene->addWidget(m_btnReloadScene, 10);
     QVBoxLayout* layoutScene = new QVBoxLayout;
-    layoutScene->addLayout(layoutReloadScene);
+    layoutScene->addLayout(        m_cbScene->getLayout());
     layoutScene->addLayout(       QtAppUtils::getLayoutSeparator(5));
-    layoutScene->addWidget(m_chkReloadVizData);
+    layoutScene->addLayout(layoutReloadScene);
     QGroupBox* grScene = new QGroupBox;
     grScene->setTitle("Scene");
     grScene->setLayout(layoutScene);

@@ -70,6 +70,7 @@ void ParticleSampler::doSampling()
         }
         if(bConverged) {
             emit relaxationFinished(true);
+            m_Generator->saveParticles();
             m_bStop = true;
             return;
         }
@@ -78,6 +79,7 @@ void ParticleSampler::doSampling()
     m_bStop = true;
     m_Generator->reportFailed(frame);
     emit relaxationFinished(false);
+    m_Generator->saveParticles();
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -151,6 +153,7 @@ void ParticleSampler::changeScene(const QString& scene)
         emit domainChanged(m_ParticleData->boxMin, m_ParticleData->boxMax);
         emit cameraChanged();
     }
+    emit sceneChanged(m_Scene);
     emit vizDataChanged();
     emit numParticleChanged(m_ParticleData->nTotalParticles);
 }
