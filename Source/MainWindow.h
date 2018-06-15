@@ -54,6 +54,7 @@ public slots:
     void updateStatusNumParticles(unsigned int numParticles);
     void changeScene(bool bReload);
     void startNewScene(const QString& sceneFile);
+    void reportLoadFailed();
     void startStopRelaxation();
     void finishIteration(unsigned int iter, float minDistanceRatio);
     void finishRelaxation(bool bSuccess);

@@ -92,7 +92,7 @@ bool MainWindow::processKeyPressEvent(QKeyEvent* event)
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void MainWindow::updateWindowTitle(const QString& filePath)
 {
-    setWindowTitle(QString("Particle Simulation: ") + filePath);
+    setWindowTitle(QString("Particle Sampler: ") + filePath);
 }
 
 void MainWindow::updateStatusRelaxation(const QString& status)
@@ -138,6 +138,14 @@ void MainWindow::startNewScene(const QString& sceneFile)
     m_FrameNumber = 0;
     updateWindowTitle(QtAppUtils::getDefaultPath("Scenes") + "/" + sceneFile);
     updateStatusRelaxation("Ready");
+    m_Controller->enableRelaxParamsWidgets(true);
+    m_BusyBar->reset();
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void MainWindow::reportLoadFailed()
+{
+    updateStatusRelaxation("Failed to load scene. Please check syntax!");
     m_Controller->enableRelaxParamsWidgets(true);
     m_BusyBar->reset();
 }
@@ -231,7 +239,7 @@ void MainWindow::setupStatusBar()
     m_lblStatusRelaxationInfo = new QLabel(this);
     m_lblStatusRelaxationInfo->setMargin(5);
     m_lblStatusRelaxationInfo->setText("Ready (Press Space to Start/Stop)");
-    statusBar()->addPermanentWidget(m_lblStatusRelaxationInfo, 1);
+    statusBar()->addPermanentWidget(m_lblStatusRelaxationInfo, 2);
 
     m_lblStatusIteration = new QLabel(this);
     m_lblStatusIteration->setMargin(5);
@@ -281,6 +289,7 @@ void MainWindow::connectWidgets()
     connect(m_Sampler, &ParticleSampler::relaxationPaused,   [&] { QMetaObject::invokeMethod(this, "pauseRelaxation", Qt::QueuedConnection); });
     connect(m_Sampler, &ParticleSampler::numParticleChanged, this,           &MainWindow::updateStatusNumParticles);
     connect(m_Sampler, &ParticleSampler::sceneChanged,       this,           &MainWindow::startNewScene);
+    connect(m_Sampler, &ParticleSampler::loadSceneFailed,    this,           &MainWindow::reportLoadFailed);
     connect(m_Sampler, &ParticleSampler::dimensionChanged,   m_RenderWidget, &RenderWidget::updateSolverDimension);
     connect(m_Sampler, &ParticleSampler::domainChanged,      m_RenderWidget, &RenderWidget::setBox);
     connect(m_Sampler, &ParticleSampler::cameraChanged,      m_RenderWidget, &RenderWidget::updateCamera);

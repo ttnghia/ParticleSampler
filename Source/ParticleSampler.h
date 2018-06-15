@@ -65,6 +65,7 @@ signals:
     void numParticleChanged(unsigned int numParticles);
     void vizDataChanged();
     void sceneChanged(const QString& sceneFile);
+    void loadSceneFailed();
 
 private:
     SharedPtr<ParticleData>               m_ParticleData = std::make_shared<ParticleData>();
