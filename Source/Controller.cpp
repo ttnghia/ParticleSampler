@@ -77,7 +77,6 @@ void Controller::setDefaultParams()
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void Controller::setupGUI()
 {
-    m_MainTab->setTabText(0, "Render Controllers");
     m_RelaxationControllers->setLayout(m_LayoutRelaxationControllers);
     m_MainTab->insertTab(0, m_RelaxationControllers, "Relaxation");
     m_MainTab->setCurrentIndex(0);

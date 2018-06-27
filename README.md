@@ -72,7 +72,7 @@ This program depends heavily on many external libraries, especially [Banana](htt
 
 ### Brief Usage
 
-Upon start up, a list of scene files stored in folder `Scenes` is loaded into the combobox `Scene` at top-right corner. Navigate through them, a scene is loaded and paticles are generate.
+Upon start up, a list of scene files stored in folder `Scenes` is loaded into the combobox `Scene` at top-right corner. Navigating through them, a scene is loaded and paticles are generated.
 
 **Keyboard shortcuts**:
 * `PageDown/PageUp`: change to next/previous scene.
