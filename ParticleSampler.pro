@@ -24,6 +24,7 @@ QT += core gui widgets
 TARGET = ParticleSampler
 TEMPLATE = app
 CONFIG += console
+CONFIG += c++17
 
 BANANA_DIR = D:/Programming/Banana
 include($$BANANA_DIR/BananaCore/BananaCore.pri)

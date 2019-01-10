@@ -24,8 +24,7 @@
 #include <Banana/Utils/JSONHelpers.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void ParticleGeneratorInterface::loadScene(const String& sceneFile)
-{
+void ParticleGeneratorInterface::loadScene(const String& sceneFile) {
     m_ParticleData->resetData();
     ////////////////////////////////////////////////////////////////////////////////;;
     // load parameters
@@ -208,8 +207,7 @@ void ParticleGeneratorInterface::loadScene(const String& sceneFile)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void ParticleGeneratorInterface::updateRelaxParams()
-{
+void ParticleGeneratorInterface::updateRelaxParams() {
     if(m_ParticleData->dimension == 2) {
         for(auto& generator: m_Generators2D) {
             generator->relaxer().updateParams();
@@ -222,8 +220,7 @@ void ParticleGeneratorInterface::updateRelaxParams()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-bool ParticleGeneratorInterface::doFrameRelaxation(UInt frame)
-{
+bool ParticleGeneratorInterface::doFrameRelaxation(UInt frame) {
     bool bConvergence = true;
     if(m_ParticleData->dimension == 2) {
         for(auto& generator: m_Generators2D) {
@@ -242,8 +239,7 @@ bool ParticleGeneratorInterface::doFrameRelaxation(UInt frame)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void ParticleGeneratorInterface::reportFailed(UInt frame)
-{
+void ParticleGeneratorInterface::reportFailed(UInt frame) {
     if(m_ParticleData->dimension == 2) {
         for(auto& generator: m_Generators2D) {
             generator->relaxer().reportFailed(frame);
@@ -256,8 +252,7 @@ void ParticleGeneratorInterface::reportFailed(UInt frame)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void ParticleGeneratorInterface::saveParticles()
-{
+void ParticleGeneratorInterface::saveParticles() {
     if(m_ParticleData->dimension == 2) {
         for(auto& generator: m_Generators2D) {
             generator->saveParticlesToFile();
@@ -270,8 +265,7 @@ void ParticleGeneratorInterface::saveParticles()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-float ParticleGeneratorInterface::getMinDistanceRatio()
-{
+float ParticleGeneratorInterface::getMinDistanceRatio() {
     float minRatio = float(1.0e10);
     if(m_ParticleData->dimension == 2) {
         for(auto& generator: m_Generators2D) {
